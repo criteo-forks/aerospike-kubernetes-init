@@ -11,12 +11,10 @@ jobs:
       with:
         go-version: ${{ env.go_version }}
     - uses: actions/checkout@v2
-    - name: Create build directory
-      run: mkdir -p output/build
-    - name: Build init
-      run: go build -v -o output/build/init .
-    - name: Build aku-adm
-      run: go build -v -o output/build/akuadm .
+    - name: Build directory
+      run: mkdir -p output/build-${GITHUB_REF#refs/*/}
+    - name: Build
+      run: go build -v -o output/build-${GITHUB_REF#refs/*/}/init .
     - name: Upload
       uses: fnkr/github-action-ghr@v1
       env:
