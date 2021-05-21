@@ -1,0 +1,25 @@
+name: Release
+on: release
+jobs:
+
+  build:
+    name: Publish artifacts
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ env.go_version }}
+    - uses: actions/checkout@v2
+    - name: Create build directory
+      run: mkdir -p output/build
+    - name: Build init
+      run: go build -v -o output/build/init .
+    - name: Build aku-adm
+      run: go build -v -o output/build/akuadm .
+    - name: Upload
+      uses: fnkr/github-action-ghr@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GHR_PATH: ./output
+        GHR_COMPRESS: gz
